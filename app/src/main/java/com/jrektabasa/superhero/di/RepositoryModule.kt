@@ -1,6 +1,8 @@
 package com.jrektabasa.superhero.di
 
+import com.jrektabasa.superhero.data.repository.auth.AuthRepositoryImpl
 import com.jrektabasa.superhero.data.repository.biography.BiographyRepositoryImpl
+import com.jrektabasa.superhero.domain.repository.auth.AuthRepository
 import com.jrektabasa.superhero.domain.repository.biography.BiographyRepository
 import dagger.Binds
 import dagger.Module
@@ -17,4 +19,9 @@ abstract class RepositoryModule {
     abstract fun bindsBiographyRepository(
         biographyRepositoryImpl: BiographyRepositoryImpl
     ): BiographyRepository
+    @Singleton
+    @Binds
+    abstract fun bindsAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository
 }
