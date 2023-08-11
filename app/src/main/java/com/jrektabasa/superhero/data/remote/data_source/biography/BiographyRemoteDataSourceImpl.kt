@@ -14,14 +14,17 @@ class BiographyRemoteDataSourceImpl @Inject constructor(
     private val client: HttpClient
 ) : BiographyRemoteDataSource {
 
-    override suspend fun getHeroBiography(id: String): BiographyResponse {
+    override suspend fun getHeroBiography(
+        id: String
+    ): BiographyResponse {
         try {
             val response: BiographyResponse =
                 client.get {
                     url(
-                        "${BuildConfig.BASE_URL}/${BuildConfig.ACCESS_TOKEN}" +
+                        "${BuildConfig.BASE_URL}/" +
+                                BuildConfig.ACCESS_TOKEN +
                                 "/$id" +
-                                "/biography",
+                                "/biography"
                     )
                 }.body()
             return response
