@@ -94,10 +94,13 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
+    //kotlinx serialization
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
+
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
-
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
+    implementation "com.google.firebase:firebase-firestore-ktx"
+    implementation "com.google.firebase:firebase-auth-ktx"
 
 
 }
