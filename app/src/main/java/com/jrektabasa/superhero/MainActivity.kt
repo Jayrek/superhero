@@ -24,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.jrektabasa.superhero.presentation.viewmodel.auth.AuthViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.biography.BiographyViewModel
+import com.jrektabasa.superhero.presentation.viewmodel.hero.HeroViewModel
 import com.jrektabasa.superhero.ui.theme.SuperheroTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
@@ -31,15 +32,22 @@ import java.lang.Exception
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<BiographyViewModel>()
+    private val biographyViewModel by viewModels<BiographyViewModel>()
     private val authViewModel by viewModels<AuthViewModel>()
+
+//    private val heroViewModel by viewModels<HeroViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val biography = viewModel.biography.collectAsState()
+            val heroViewModel by viewModels<HeroViewModel>()
+
+
+            val biography = biographyViewModel.biography.collectAsState()
 
             val signInUiState = authViewModel.signInUiState.collectAsState()
+
+            val heroList = heroViewModel.users.collectAsState()
 
             val googleSignInLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
@@ -51,7 +59,8 @@ class MainActivity : ComponentActivity() {
             }
 
             SuperheroTheme {
-                // A surface container using the 'background' color from the theme
+                // A surface container using the 'background' color from the theme\
+
                 biography.value?.let {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
@@ -61,7 +70,8 @@ class MainActivity : ComponentActivity() {
                             Text(text = it.name)
                             Text(it.fullName)
                             Button(onClick = {
-                                startGoogleSignIn(googleSignInLauncher)
+
+//                                startGoogleSignIn(googleSignInLauncher)
                             }) {
                                 Text("Sign In with Google")
                             }
