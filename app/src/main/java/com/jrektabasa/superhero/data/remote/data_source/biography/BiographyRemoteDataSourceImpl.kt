@@ -8,6 +8,7 @@ import io.ktor.client.request.*
 import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.jrektabasa.superhero.data.common.Result
 
 @Singleton
 class BiographyRemoteDataSourceImpl @Inject constructor(
@@ -16,20 +17,16 @@ class BiographyRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getHeroBiography(
         id: String
-    ): BiographyResponse {
-        try {
-            val response: BiographyResponse =
-                client.get {
-                    url(
-                        "${BuildConfig.BASE_URL}/" +
-                                BuildConfig.ACCESS_TOKEN +
-                                "/$id" +
-                                "/biography"
-                    )
-                }.body()
-            return response
+    ): Result<BiographyResponse> {
+        return try {
+            val response: BiographyResponse = client.get {
+                url(
+                    "${BuildConfig.BASE_URL}/" + BuildConfig.ACCESS_TOKEN + "/$id" + "/biography"
+                )
+            }.body()
+            return Result.Success(response)
         } catch (e: Exception) {
-            throw Exception(e.message)
+            Result.Error(e.message.toString())
         }
     }
 }

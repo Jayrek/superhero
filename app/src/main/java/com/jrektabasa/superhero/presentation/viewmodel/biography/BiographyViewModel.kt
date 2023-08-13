@@ -2,6 +2,7 @@ package com.jrektabasa.superhero.presentation.viewmodel.biography
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jrektabasa.superhero.data.common.Result
 import com.jrektabasa.superhero.data.model.response.BiographyResponse
 import com.jrektabasa.superhero.domain.model.Biography
 import com.jrektabasa.superhero.domain.repository.biography.BiographyRepository
@@ -16,8 +17,8 @@ class BiographyViewModel @Inject constructor(
     private val repository: BiographyRepository
 ) : ViewModel() {
 
-    private val _biography = MutableStateFlow<Biography?>(null)
-    val biography: StateFlow<Biography?> = _biography
+    private val _biography = MutableStateFlow<Result<Biography>?>(null)
+    val biography: StateFlow<Result<Biography>?> = _biography
 
     init {
         viewModelScope.launch {
