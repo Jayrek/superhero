@@ -1,7 +1,7 @@
 package com.jrektabasa.superhero.data.remote.data_source.biography
 
 import com.jrektabasa.superhero.BuildConfig
-import com.jrektabasa.superhero.data.model.BiographyResponse
+import com.jrektabasa.superhero.data.model.response.BiographyResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.*
