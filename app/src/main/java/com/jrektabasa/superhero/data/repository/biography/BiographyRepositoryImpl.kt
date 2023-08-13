@@ -1,5 +1,6 @@
 package com.jrektabasa.superhero.data.repository.biography
 
+import com.jrektabasa.superhero.data.common.Result
 import com.jrektabasa.superhero.data.remote.data_source.biography.BiographyRemoteDataSource
 import com.jrektabasa.superhero.domain.mapper.BiographyMapper
 import com.jrektabasa.superhero.domain.model.Biography
@@ -13,8 +14,13 @@ class BiographyRepositoryImpl @Inject constructor(
     private val mapper: BiographyMapper,
 ) : BiographyRepository {
 
-    override suspend fun getHeroBiography(id: String): Biography? {
-        val heroBiography = dataSource.getHeroBiography(id)
-        return heroBiography?.let { mapper.mapToDomain(it) }
+    override suspend fun getHeroBiography(id: String): Result<Biography> {
+        val response = when (val res = dataSource.getHeroBiography(id)) {
+            is Result.Success -> res.data
+            is Result.Error -> throw Exception()
+        }
+
+        val biography = mapper.mapToDomain(response)
+        return Result.Success(biography)
     }
 }

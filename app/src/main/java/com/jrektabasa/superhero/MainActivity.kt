@@ -10,10 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.jrektabasa.superhero.data.common.Result
+import com.jrektabasa.superhero.data.common.exhaustive
 import com.jrektabasa.superhero.presentation.viewmodel.auth.AuthViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.biography.BiographyViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.hero.HeroViewModel
@@ -43,7 +42,7 @@ class MainActivity : ComponentActivity() {
             val heroViewModel by viewModels<HeroViewModel>()
 
 
-            val biography = biographyViewModel.biography.collectAsState()
+
 
             val signInUiState = authViewModel.signInUiState.collectAsState()
 
@@ -60,15 +59,16 @@ class MainActivity : ComponentActivity() {
 
             SuperheroTheme {
                 // A surface container using the 'background' color from the theme\
+                val biography = biographyViewModel.biography.collectAsState()
 
-                biography.value?.let {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
+                when(biography.value){
+                    is Result.Error -> TODO()
+                    is Result.Success -> {
+                        val biographyData = (biography.value as Result.Success).data
+
                         Column() {
-                            Text(text = it.name)
-                            Text(it.fullName)
+                            Text(text = biographyData.name)
+                            Text(biographyData.fullName)
                             Button(onClick = {
 
 //                                startGoogleSignIn(googleSignInLauncher)
@@ -80,8 +80,33 @@ class MainActivity : ComponentActivity() {
                             Log.wtf("login", "${result.value?.isSuccess}")
                             Log.wtf("loginError", "${result.value?.error}")
                         }
+
+//                        biography.value?.let {
+//                            Surface(
+//                                modifier = Modifier.fillMaxSize(),
+//                                color = MaterialTheme.colorScheme.background
+//                            ) {
+//                                Column() {
+//                                    Text(text = it)
+//                                    Text(it.fullName)
+//                                    Button(onClick = {
+//
+////                                startGoogleSignIn(googleSignInLauncher)
+//                                    }) {
+//                                        Text("Sign In with Google")
+//                                    }
+//                                }
+//                                signInUiState.let { result ->
+//                                    Log.wtf("login", "${result.value?.isSuccess}")
+//                                    Log.wtf("loginError", "${result.value?.error}")
+//                                }
+//                            }
+//                        }
                     }
-                }
+                    else -> {}
+                }.exhaustive
+
+
 
             }
         }
