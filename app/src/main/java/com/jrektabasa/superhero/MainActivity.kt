@@ -9,11 +9,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,11 +41,9 @@ class MainActivity : ComponentActivity() {
             val heroViewModel by viewModels<HeroViewModel>()
 
 
-
-
             val signInUiState = authViewModel.signInUiState.collectAsState()
 
-            val heroList = heroViewModel.users.collectAsState()
+            val heroList = heroViewModel.heroList.collectAsState()
 
             val googleSignInLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.StartActivityForResult()
@@ -59,35 +56,48 @@ class MainActivity : ComponentActivity() {
 
             SuperheroTheme {
                 // A surface container using the 'background' color from the theme
-                LaunchedEffect(true) {
-                    biographyViewModel.getHeroBiography("312")
-                }
-
-                val biography = biographyViewModel.biography.collectAsState()
-
-                when(biography.value){
+//                LaunchedEffect(true) {
+//                    biographyViewModel.getHeroBiography("312")
+//                }
+                Log.wtf("heroList: ", "${heroList.value}")
+                when (heroList.value) {
                     is Result.Error -> TODO()
                     is Result.Success -> {
-                        val biographyData = (biography.value as Result.Success).data
-
-                        Column() {
-                            Text(text = biographyData.name)
-                            Text(biographyData.fullName)
-                            Button(onClick = {
-
-//                                startGoogleSignIn(googleSignInLauncher)
-                            }) {
-                                Text("Sign In with Google")
+                        val heroes = (heroList.value as Result.Success).data
+                        LazyColumn {
+                            items(items = heroes) { hero ->
+                                Text(text = "id: ${hero.heroId} = ${hero.name}")
                             }
                         }
-                        signInUiState.let { result ->
-                            Log.wtf("login", "${result.value?.isSuccess}")
-                            Log.wtf("loginError", "${result.value?.error}")
-                        }
                     }
-                    null -> {}
+
+                    null -> Text("dfsfs")
                 }
 
+//                val biography = biographyViewModel.biography.collectAsState()
+//
+//                when(biography.value){
+//                    is Result.Error -> TODO()
+//                    is Result.Success -> {
+//                        val biographyData = (biography.value as Result.Success).data
+//
+//                        Column() {
+//                            Text(text = biographyData.name)
+//                            Text(biographyData.fullName)
+//                            Button(onClick = {
+//
+////                                startGoogleSignIn(googleSignInLauncher)
+//                            }) {
+//                                Text("Sign In with Google")
+//                            }
+//                        }
+//                        signInUiState.let { result ->
+//                            Log.wtf("login", "${result.value?.isSuccess}")
+//                            Log.wtf("loginError", "${result.value?.error}")
+//                        }
+//                    }
+//                    null -> {}
+//                }
 
 
             }
