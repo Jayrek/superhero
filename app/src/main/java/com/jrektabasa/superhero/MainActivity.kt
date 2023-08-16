@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,7 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.jrektabasa.superhero.data.common.Result
-import com.jrektabasa.superhero.data.common.exhaustive
 import com.jrektabasa.superhero.presentation.viewmodel.auth.AuthViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.biography.BiographyViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.hero.HeroViewModel
@@ -58,7 +58,11 @@ class MainActivity : ComponentActivity() {
             }
 
             SuperheroTheme {
-                // A surface container using the 'background' color from the theme\
+                // A surface container using the 'background' color from the theme
+                LaunchedEffect(true) {
+                    biographyViewModel.getHeroBiography("312")
+                }
+
                 val biography = biographyViewModel.biography.collectAsState()
 
                 when(biography.value){
@@ -80,31 +84,9 @@ class MainActivity : ComponentActivity() {
                             Log.wtf("login", "${result.value?.isSuccess}")
                             Log.wtf("loginError", "${result.value?.error}")
                         }
-
-//                        biography.value?.let {
-//                            Surface(
-//                                modifier = Modifier.fillMaxSize(),
-//                                color = MaterialTheme.colorScheme.background
-//                            ) {
-//                                Column() {
-//                                    Text(text = it)
-//                                    Text(it.fullName)
-//                                    Button(onClick = {
-//
-////                                startGoogleSignIn(googleSignInLauncher)
-//                                    }) {
-//                                        Text("Sign In with Google")
-//                                    }
-//                                }
-//                                signInUiState.let { result ->
-//                                    Log.wtf("login", "${result.value?.isSuccess}")
-//                                    Log.wtf("loginError", "${result.value?.error}")
-//                                }
-//                            }
-//                        }
                     }
-                    else -> {}
-                }.exhaustive
+                    null -> {}
+                }
 
 
 
