@@ -7,15 +7,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -25,6 +29,7 @@ import com.jrektabasa.superhero.presentation.viewmodel.biography.BiographyViewMo
 import com.jrektabasa.superhero.presentation.viewmodel.hero.HeroViewModel
 import com.jrektabasa.superhero.ui.theme.SuperheroTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 @AndroidEntryPoint
@@ -41,34 +46,71 @@ class MainActivity : ComponentActivity() {
             val heroViewModel by viewModels<HeroViewModel>()
 
 
-            val signInUiState = authViewModel.signInUiState.collectAsState()
+            val signInIntent = authViewModel.intentSender.collectAsState()
 
             val heroList = heroViewModel.heroList.collectAsState()
 
             val googleSignInLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.StartActivityForResult()
-            ) {
-                if (it.resultCode == RESULT_OK) {
-                    val intent = it.data
-                    handleGoogleSignInState(intent)
+                contract = ActivityResultContracts.StartIntentSenderForResult(),
+                onResult = { result ->
+                    if (result.resultCode == RESULT_OK) {
+                        lifecycleScope.launch {
+                            authViewModel.signInWithIntent(result)
+
+                        }
+//                    val intent = it.data
+//                    handleGoogleSignInState(intent)
+                    }
                 }
-            }
+            )
 
             SuperheroTheme {
                 // A surface container using the 'background' color from the theme
 //                LaunchedEffect(true) {
 //                    biographyViewModel.getHeroBiography("312")
 //                }
+                when (signInIntent.value) {
+                    is Result.Success -> {
+                        val df = (signInIntent.value as Result.Success).data
+                        googleSignInLauncher.launch(
+                            IntentSenderRequest.Builder(
+                                df ?: return@SuperheroTheme
+                            ).build()
+                        )
+                    }
+
+                    is Result.Error -> TODO()
+                    null -> Text("signisdf")
+                }
+
                 Log.wtf("heroList: ", "${heroList.value}")
                 when (heroList.value) {
                     is Result.Error -> TODO()
                     is Result.Success -> {
                         val heroes = (heroList.value as Result.Success).data
-                        LazyColumn {
-                            items(items = heroes) { hero ->
-                                Text(text = "id: ${hero.heroId} = ${hero.name}")
+
+                        Column {
+                            Button(onClick = {
+                                lifecycleScope.launch {
+                                    authViewModel.signInWithGoogle()
+//                                    googleSignInLauncher.launch(
+//                                        IntentSenderRequest.Builder(
+//                                            sdf ?: return@launch
+//                                        ).build()
+//                                    )
+                                }
+
+//                                startGoogleSignIn(googleSignInLauncher)
+                            }) {
+                                Text("Sign In with Google")
+                            }
+                            LazyColumn {
+                                items(items = heroes) { hero ->
+                                    Text(text = "id: ${hero.heroId} = ${hero.name}")
+                                }
                             }
                         }
+
                     }
 
                     null -> Text("dfsfs")
@@ -111,7 +153,7 @@ class MainActivity : ComponentActivity() {
             val idToken = account?.idToken
 
             if (idToken != null) {
-                authViewModel.signInWithGoogle(idToken = idToken)
+                authViewModel.signInWithGoogle()
             } else {
                 Log.wtf("handleGoogleSignInState: ", "no idToken")
             }

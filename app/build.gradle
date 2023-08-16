@@ -28,12 +28,14 @@ android {
         debug {
             buildConfigField('String', 'BASE_URL', '"https://www.superheroapi.com/api.php"')
             buildConfigField('String', 'ACCESS_TOKEN', '"10217999359720721"')
+            buildConfigField('String', 'WEB_CLIENT_ID', '"1015689439583-h3rshnq50helmtunvfc6tl1df082lcmk.apps.googleusercontent.com"')
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField('String', 'BASE_URL', '"https://www.superheroapi.com/api.php"')
             buildConfigField('String', 'ACCESS_TOKEN', '"10217999359720721"')
+            buildConfigField('String', 'WEB_CLIENT_ID', '"1015689439583-h3rshnq50helmtunvfc6tl1df082lcmk.apps.googleusercontent.com"')
         }
     }
     compileOptions {
