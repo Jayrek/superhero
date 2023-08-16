@@ -4,6 +4,6 @@ import com.google.firebase.auth.FirebaseUser
 
 data class SignInUiState(
     val user: FirebaseUser? = null,
-    val isSuccess: Boolean,
+    val isSuccess: Boolean = false,
     val error: String = ""
 )
