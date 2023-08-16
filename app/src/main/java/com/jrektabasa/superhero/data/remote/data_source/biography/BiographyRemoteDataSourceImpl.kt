@@ -15,16 +15,14 @@ class BiographyRemoteDataSourceImpl @Inject constructor(
     private val client: HttpClient
 ) : BiographyRemoteDataSource {
 
-    override suspend fun getHeroBiography(
-        id: String
-    ): Result<BiographyResponse> {
+    override suspend fun getHeroBiography(id: String): Result<BiographyResponse> {
         return try {
             val response: BiographyResponse = client.get {
                 url(
                     "${BuildConfig.BASE_URL}/" + BuildConfig.ACCESS_TOKEN + "/$id" + "/biography"
                 )
             }.body()
-            return Result.Success(response)
+            Result.Success(response)
         } catch (e: Exception) {
             Result.Error(e.message.toString())
         }
