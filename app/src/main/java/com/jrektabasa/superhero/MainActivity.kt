@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.jrektabasa.superhero.data.common.Result
+import com.jrektabasa.superhero.presentation.screen.SignInScreen
 import com.jrektabasa.superhero.presentation.viewmodel.auth.AuthViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.biography.BiographyViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.hero.HeroViewModel
@@ -59,11 +60,12 @@ class MainActivity : ComponentActivity() {
             )
 
             SuperheroTheme {
+                SignInScreen()
                 // A surface container using the 'background' color from the theme
 //                LaunchedEffect(true) {
 //                    biographyViewModel.getHeroBiography("312")
 //                }
-                when (signInIntent.value) {
+               /* when (signInIntent.value) {
                     is Result.Success -> {
                         val df = (signInIntent.value as Result.Success).data
                         googleSignInLauncher.launch(
@@ -102,7 +104,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     null -> Text("dfsfs")
-                }
+                }*/
 
 //                val biography = biographyViewModel.biography.collectAsState()
 //
