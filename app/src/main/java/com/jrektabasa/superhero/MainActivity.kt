@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val heroViewModel by viewModels<HeroViewModel>()
+            val authViewModel by viewModels<AuthViewModel>()
 
 
             val signInIntent = authViewModel.intentSender.collectAsState()
@@ -60,51 +61,51 @@ class MainActivity : ComponentActivity() {
             )
 
             SuperheroTheme {
-                SignInScreen()
+                SignInScreen(authViewModel)
                 // A surface container using the 'background' color from the theme
 //                LaunchedEffect(true) {
 //                    biographyViewModel.getHeroBiography("312")
 //                }
-               /* when (signInIntent.value) {
-                    is Result.Success -> {
-                        val df = (signInIntent.value as Result.Success).data
-                        googleSignInLauncher.launch(
-                            IntentSenderRequest.Builder(
-                                df ?: return@SuperheroTheme
-                            ).build()
-                        )
-                    }
+                /* when (signInIntent.value) {
+                     is Result.Success -> {
+                         val df = (signInIntent.value as Result.Success).data
+                         googleSignInLauncher.launch(
+                             IntentSenderRequest.Builder(
+                                 df ?: return@SuperheroTheme
+                             ).build()
+                         )
+                     }
 
-                    is Result.Error -> TODO()
-                    null -> Text("signisdf")
-                }
+                     is Result.Error -> TODO()
+                     null -> Text("signisdf")
+                 }
 
-                Log.wtf("heroList: ", "${heroList.value}")
-                when (heroList.value) {
-                    is Result.Error -> TODO()
-                    is Result.Success -> {
-                        val heroes = (heroList.value as Result.Success).data
+                 Log.wtf("heroList: ", "${heroList.value}")
+                 when (heroList.value) {
+                     is Result.Error -> TODO()
+                     is Result.Success -> {
+                         val heroes = (heroList.value as Result.Success).data
 
-                        Column {
-                            Button(onClick = {
-                                lifecycleScope.launch {
-                                    authViewModel.signInWithGoogle()
-                                }
+                         Column {
+                             Button(onClick = {
+                                 lifecycleScope.launch {
+                                     authViewModel.signInWithGoogle()
+                                 }
 
-                            }) {
-                                Text("Sign In with Google")
-                            }
-                            LazyColumn {
-                                items(items = heroes) { hero ->
-                                    Text(text = "id: ${hero.heroId} = ${hero.name}")
-                                }
-                            }
-                        }
+                             }) {
+                                 Text("Sign In with Google")
+                             }
+                             LazyColumn {
+                                 items(items = heroes) { hero ->
+                                     Text(text = "id: ${hero.heroId} = ${hero.name}")
+                                 }
+                             }
+                         }
 
-                    }
+                     }
 
-                    null -> Text("dfsfs")
-                }*/
+                     null -> Text("dfsfs")
+                 }*/
 
 //                val biography = biographyViewModel.biography.collectAsState()
 //
