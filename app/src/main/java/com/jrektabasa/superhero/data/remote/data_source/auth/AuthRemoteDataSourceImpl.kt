@@ -6,6 +6,7 @@ import android.util.Log
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.jrektabasa.superhero.BuildConfig
@@ -18,15 +19,24 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthRemoteDataSourceImpl @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
-    private val oneTapClient: SignInClient
-) :
-    AuthRemoteDataSource {
+    private val firebaseAuth: FirebaseAuth, private val oneTapClient: SignInClient
+) : AuthRemoteDataSource {
 
     override suspend fun signInWithGoogle(): Result<IntentSender?> {
         return try {
             val result = oneTapClient.beginSignIn(buildSignInRequest()).await()
             Result.Success(result?.pendingIntent?.intentSender)
+        } catch (e: Exception) {
+            Result.Error(e.message.toString())
+        }
+    }
+
+    override suspend fun signInWithEmailAndPassword(
+        email: String, password: String
+    ): Result<AuthResult> {
+        return try {
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            Result.Success(result)
         } catch (e: Exception) {
             Result.Error(e.message.toString())
         }
@@ -54,16 +64,11 @@ class AuthRemoteDataSourceImpl @Inject constructor(
 
 
     private fun buildSignInRequest(): BeginSignInRequest {
-        return BeginSignInRequest.Builder()
-            .setGoogleIdTokenRequestOptions(
-                GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId(BuildConfig.WEB_CLIENT_ID)
-                    .build()
-            )
-            .setAutoSelectEnabled(true)
-            .build()
+        return BeginSignInRequest.Builder().setGoogleIdTokenRequestOptions(
+            GoogleIdTokenRequestOptions.builder().setSupported(true)
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(BuildConfig.WEB_CLIENT_ID).build()
+        ).setAutoSelectEnabled(true).build()
     }
 
     override suspend fun signOut(): Result<Unit> {
@@ -71,8 +76,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             oneTapClient.signOut().await()
             firebaseAuth.signOut()
             Result.Success(Unit)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             Result.Error(e.message.toString())
         }
     }
