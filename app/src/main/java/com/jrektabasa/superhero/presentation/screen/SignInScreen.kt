@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,14 +32,17 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jrektabasa.superhero.data.common.Result
+import com.jrektabasa.superhero.presentation.viewmodel.auth.AuthViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen() {
+fun SignInScreen(viewModel: AuthViewModel) {
+    val authState by viewModel.authResult.collectAsState()
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -92,6 +96,7 @@ fun SignInScreen() {
                 onClick = {
                     Log.wtf("email: ", email)
                     Log.wtf("password: ", password)
+                    viewModel.signInWithEmailAndPassword(email, password)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,12 +130,28 @@ fun SignInScreen() {
                     textDecoration = TextDecoration.Underline
                 )
             }
+
+            when (authState) {
+                is Result.Success -> {
+                    val user = (authState as Result.Success).data
+                    Log.wtf("LOGIN", "success")
+                    Log.wtf("LOGIN", "${user.user?.email}")
+                }
+
+                is Result.Error -> {
+                    Log.wtf("LOGIN", "error")
+                }
+
+                null -> {
+                    Log.wtf("LOGIN", "unknown error")
+                }
+            }
         }
     }
 }
 
-@Preview
-@Composable
-fun SignInScreenPreview() {
-    SignInScreen()
-}
+//@Preview
+//@Composable
+//fun SignInScreenPreview() {
+//    SignInScreen()
+//}

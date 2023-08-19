@@ -2,6 +2,7 @@ package com.jrektabasa.superhero.data.repository.auth
 
 import android.content.Intent
 import android.content.IntentSender
+import com.google.firebase.auth.AuthResult
 import com.jrektabasa.superhero.data.common.Result
 import com.jrektabasa.superhero.data.model.response.UserResponse
 import com.jrektabasa.superhero.data.remote.data_source.auth.AuthRemoteDataSource
@@ -15,6 +16,17 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
     override suspend fun signInWithGoogle(): Result<IntentSender?> {
         val response = when (val res = dataSource.signInWithGoogle()) {
+            is Result.Success -> res.data
+            is Result.Error -> throw Exception()
+        }
+        return Result.Success(response)
+    }
+
+    override suspend fun signInWithEmailAndPassword(
+        email: String,
+        password: String
+    ): Result<AuthResult> {
+        val response = when (val res = dataSource.signInWithEmailAndPassword(email, password)) {
             is Result.Success -> res.data
             is Result.Error -> throw Exception()
         }
