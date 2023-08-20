@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -14,12 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.jrektabasa.superhero.data.common.Result
 import com.jrektabasa.superhero.presentation.viewmodel.hero.HeroByIdViewModel
 
 @Composable
-fun HeroScreen(viewModel: HeroByIdViewModel) {
+fun HeroScreen(
+    navHostController: NavHostController,
+    viewModel: HeroByIdViewModel,
+    id: String,
+) {
+    LaunchedEffect(true) {
+        viewModel.getHeroInfo(id)
+    }
+
     val heroState by viewModel.hero.collectAsState()
 
     heroState?.let { result ->

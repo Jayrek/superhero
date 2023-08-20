@@ -15,13 +15,12 @@ import javax.inject.Inject
 class HeroByIdViewModel @Inject constructor(
     private val useCase: FetchHeroApiByIdUseCase
 ) : ViewModel() {
-
     private val _hero = MutableStateFlow<Result<HeroApi>?>(null)
     val hero = _hero.asStateFlow()
 
-    init {
+    suspend fun getHeroInfo(id: String) {
         viewModelScope.launch {
-            val response = useCase.execute("720")
+            val response = useCase.execute(id)
             _hero.value = response
         }
     }
