@@ -14,38 +14,41 @@ import javax.inject.Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val dataSource: AuthRemoteDataSource
 ) : AuthRepository {
+
+    /*
+    * sign in with google provider
+    * */
     override suspend fun signInWithGoogle(): Result<IntentSender?> {
-        val response = when (val res = dataSource.signInWithGoogle()) {
-            is Result.Success -> res.data
-            is Result.Error -> throw Exception()
+        return when (val res = dataSource.signInWithGoogle()) {
+            is Result.Success -> Result.Success(res.data)
+            is Result.Error -> Result.Error(res.message)
         }
-        return Result.Success(response)
     }
 
+    /*
+    * sign in with email and password provider
+    * */
     override suspend fun signInWithEmailAndPassword(
         email: String,
         password: String
     ): Result<AuthResult> {
-        val response = when (val res = dataSource.signInWithEmailAndPassword(email, password)) {
-            is Result.Success -> res.data
-            is Result.Error -> throw Exception()
+        return when (val res = dataSource.signInWithEmailAndPassword(email, password)) {
+            is Result.Success -> Result.Success(res.data)
+            is Result.Error -> Result.Error(res.message)
         }
-        return Result.Success(response)
     }
 
     override suspend fun signInWithIntent(intent: Intent): Result<UserResponse> {
-        val response = when (val res = dataSource.signInWithIntent(intent)) {
-            is Result.Success -> res.data
-            is Result.Error -> throw Exception()
+        return when (val res = dataSource.signInWithIntent(intent)) {
+            is Result.Success -> Result.Success(res.data)
+            is Result.Error -> Result.Error(res.message)
         }
-        return Result.Success(response)
     }
 
     override suspend fun signOut(): Result<Unit> {
-        val response = when (val res = dataSource.signOut()) {
-            is Result.Success -> res.data
-            is Result.Error -> throw Exception()
+        return when (val res = dataSource.signOut()) {
+            is Result.Success -> Result.Success(res.data)
+            is Result.Error -> Result.Error(res.message)
         }
-        return Result.Success(response)
     }
 }
