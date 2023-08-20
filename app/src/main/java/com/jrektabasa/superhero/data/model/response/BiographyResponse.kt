@@ -5,9 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BiographyResponse(
-    val id: String,
-    val response: String,
-    val name: String,
+//    val id: String,
+//    val response: String,
+//    val name: String,
     @SerialName("full-name")
     val fullName: String,
     @SerialName("alter-egos")

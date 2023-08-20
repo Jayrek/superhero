@@ -131,19 +131,18 @@ fun SignInScreen(viewModel: AuthViewModel) {
                 )
             }
 
-            when (authState) {
-                is Result.Success -> {
-                    val user = (authState as Result.Success).data
-                    Log.wtf("LOGIN", "success")
-                    Log.wtf("LOGIN", "${user.user?.email}")
-                }
+            authState?.let { auth ->
+                when (auth) {
+                    is Result.Success -> {
+                        val user = auth.data
+                        Log.wtf("LOGIN", "${user.user?.email}")
+                    }
 
-                is Result.Error -> {
-                    Log.wtf("LOGIN", "error")
-                }
+                    is Result.Error -> {
+                        val errorMessage = auth.message
+                        Log.wtf("LOGIN:errorMessage", errorMessage)
 
-                null -> {
-                    Log.wtf("LOGIN", "unknown error")
+                    }
                 }
             }
         }

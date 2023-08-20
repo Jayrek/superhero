@@ -11,9 +11,9 @@ class BiographyMapper @Inject constructor() {
     // TODO should have a separate mapper for the mapToDomain object and list function
     fun mapToDomain(response: BiographyResponse): Biography {
         return Biography(
-            response.id,
-            response.response,
-            response.name,
+//            response.id,
+//            response.response,
+//            response.name,
             response.fullName,
             response.alterEgos,
             response.aliases,

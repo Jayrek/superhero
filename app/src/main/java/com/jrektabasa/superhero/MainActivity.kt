@@ -19,9 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.jrektabasa.superhero.data.common.Result
+import com.jrektabasa.superhero.presentation.screen.DashBoardScreen
+import com.jrektabasa.superhero.presentation.screen.HeroScreen
 import com.jrektabasa.superhero.presentation.screen.SignInScreen
 import com.jrektabasa.superhero.presentation.viewmodel.auth.AuthViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.biography.BiographyViewModel
+import com.jrektabasa.superhero.presentation.viewmodel.hero.HeroByIdViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.hero.HeroViewModel
 import com.jrektabasa.superhero.ui.theme.SuperheroTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +43,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val heroViewModel by viewModels<HeroViewModel>()
             val authViewModel by viewModels<AuthViewModel>()
+            val heroByIdViewModel by viewModels<HeroByIdViewModel>()
 
 
             val signInIntent = authViewModel.intentSender.collectAsState()
@@ -61,7 +65,9 @@ class MainActivity : ComponentActivity() {
             )
 
             SuperheroTheme {
-                SignInScreen(authViewModel)
+                DashBoardScreen(heroViewModel)
+//                HeroScreen(heroByIdViewModel)
+//                SignInScreen(authViewModel)
                 // A surface container using the 'background' color from the theme
 //                LaunchedEffect(true) {
 //                    biographyViewModel.getHeroBiography("312")
