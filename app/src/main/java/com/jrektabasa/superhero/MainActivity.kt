@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.jrektabasa.superhero.data.common.Result
+import com.jrektabasa.superhero.presentation.screen.HeroScreen
 import com.jrektabasa.superhero.presentation.screen.SignInScreen
 import com.jrektabasa.superhero.presentation.viewmodel.auth.AuthViewModel
 import com.jrektabasa.superhero.presentation.viewmodel.biography.BiographyViewModel
@@ -61,7 +62,8 @@ class MainActivity : ComponentActivity() {
             )
 
             SuperheroTheme {
-                SignInScreen(authViewModel)
+                HeroScreen()
+//                SignInScreen(authViewModel)
                 // A surface container using the 'background' color from the theme
 //                LaunchedEffect(true) {
 //                    biographyViewModel.getHeroBiography("312")
