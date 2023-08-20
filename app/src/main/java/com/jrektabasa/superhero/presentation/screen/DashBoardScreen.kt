@@ -1,6 +1,5 @@
 package com.jrektabasa.superhero.presentation.screen
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,12 +12,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.jrektabasa.superhero.data.common.Result
 import com.jrektabasa.superhero.presentation.viewmodel.hero.HeroViewModel
+import com.jrektabasa.superhero.util.navigation.NavigationScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashBoardScreen(viewModel: HeroViewModel) {
+fun DashBoardScreen(
+    navHostController: NavHostController,
+    viewModel: HeroViewModel
+) {
+
     val heroListState by viewModel.heroList.collectAsState()
 
     heroListState?.let { result ->
@@ -28,14 +33,20 @@ fun DashBoardScreen(viewModel: HeroViewModel) {
 
                 LazyColumn {
                     items(items = heroList) { hero ->
-                        ListItem(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .clickable {
-                                    Log.wtf("clicked: ", hero.name)
-                                }, headlineText = {
-                                Text(text = hero.name)
-                            })
+                        ListItem(modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp)
+                            .clickable {
+                                navHostController.navigate(
+                                    NavigationScreen.Hero.route.replace(
+                                        "{id}", "${hero.heroId}"
+                                    )
+                                )
+
+                            }, headlineText = {
+                            Text(text = hero.name)
+                        }, supportingText = {
+                            Text(text = "${hero.heroId}")
+                        })
 
                     }
                 }
