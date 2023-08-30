@@ -29,6 +29,9 @@ android {
             buildConfigField('String', 'BASE_URL', '"https://www.superheroapi.com/api.php"')
             buildConfigField('String', 'ACCESS_TOKEN', '"10217999359720721"')
             buildConfigField('String', 'WEB_CLIENT_ID', '"1015689439583-h3rshnq50helmtunvfc6tl1df082lcmk.apps.googleusercontent.com"')
+            buildConfigField('String', 'BASE_MARVEL_URL', '"https://gateway.marvel.com/v1/public"')
+            buildConfigField('String', 'PUBLIC_API_KEY', '"8719f8a61513bad0f876f05f9875e24b"')
+            buildConfigField('String', 'PRIVATE_API_KEY', '"264dde56abde1df35bb04cf727c2c3bfb677dfa4"')
         }
         release {
             minifyEnabled false

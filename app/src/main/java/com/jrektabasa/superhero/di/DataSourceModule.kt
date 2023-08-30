@@ -3,6 +3,8 @@ package com.jrektabasa.superhero.di
 import com.jrektabasa.superhero.data.remote.data_source.auth.AuthRemoteDataSource
 import com.jrektabasa.superhero.data.remote.data_source.auth.AuthRemoteDataSourceImpl
 import com.jrektabasa.superhero.data.remote.data_source.biography.*
+import com.jrektabasa.superhero.data.remote.data_source.character.CharacterRemoteDataSource
+import com.jrektabasa.superhero.data.remote.data_source.character.CharacterRemoteDataSourceImpl
 import com.jrektabasa.superhero.data.remote.data_source.hero.HeroRemoteDataSource
 import com.jrektabasa.superhero.data.remote.data_source.hero.HeroRemoteDataSourceImpl
 import dagger.Binds
@@ -32,4 +34,10 @@ abstract class DataSourceModule {
     abstract fun bindsHeroRemoteDataSource(
         heroRemoteDataSourceImpl: HeroRemoteDataSourceImpl
     ): HeroRemoteDataSource
+
+    @Singleton
+    @Binds
+    abstract fun bindsCharacterRemoteDataSource(
+        characterRemoteDataSourceImpl: CharacterRemoteDataSourceImpl
+    ): CharacterRemoteDataSource
 }

@@ -2,10 +2,12 @@ package com.jrektabasa.superhero.di
 
 import com.jrektabasa.superhero.data.repository.auth.AuthRepositoryImpl
 import com.jrektabasa.superhero.data.repository.biography.BiographyRepositoryImpl
+import com.jrektabasa.superhero.data.repository.character.CharacterRepositoryImpl
 import com.jrektabasa.superhero.data.repository.hero.HeroRepositoryImpl
 import com.jrektabasa.superhero.domain.repository.HeroRepository
 import com.jrektabasa.superhero.domain.repository.auth.AuthRepository
 import com.jrektabasa.superhero.domain.repository.biography.BiographyRepository
+import com.jrektabasa.superhero.domain.repository.character.CharacterRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -21,14 +23,22 @@ abstract class RepositoryModule {
     abstract fun bindsBiographyRepository(
         biographyRepositoryImpl: BiographyRepositoryImpl
     ): BiographyRepository
+
     @Singleton
     @Binds
     abstract fun bindsAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl
     ): AuthRepository
+
     @Singleton
     @Binds
     abstract fun bindsHeroRepository(
         heroRepositoryImpl: HeroRepositoryImpl
     ): HeroRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindsCharacterRepository(
+        characterRepositoryImpl: CharacterRepositoryImpl
+    ): CharacterRepository
 }
